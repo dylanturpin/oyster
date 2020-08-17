@@ -18,6 +18,7 @@ from rlkit.torch.sac.agent import PEARLAgent
 from rlkit.launchers.launcher_util import setup_logger
 import rlkit.torch.pytorch_util as ptu
 from configs.default import default_config
+import wandb
 
 
 def experiment(variant):
@@ -102,6 +103,7 @@ def experiment(variant):
     # TODO support Docker
     exp_id = 'debug' if DEBUG else None
     experiment_log_dir = setup_logger(variant['env_name'], variant=variant, exp_id=exp_id, base_log_dir=variant['util_params']['base_log_dir'])
+    wandb.init(project='pearl', config=variant)
 
     # optionally save eval trajectories as pkl files
     if variant['algo_params']['dump_eval_paths']:
@@ -139,4 +141,3 @@ def main(config, gpu, docker, debug):
 
 if __name__ == "__main__":
     main()
-

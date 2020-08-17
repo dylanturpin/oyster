@@ -18,6 +18,7 @@ import pickle
 import base64
 import errno
 import torch
+import wandb
 
 from rlkit.core.tabulate import tabulate
 
@@ -231,6 +232,9 @@ def dump_tabular(*args, **kwargs):
             for line in tabulate(_tabular).split('\n'):
                 log(line, *args, **kwargs)
         tabular_dict = dict(_tabular)
+        # write to wandb
+        wandb.log({k:float(v) for (k,v) in tabular_dict.items()})
+
         # Also write to the csv files
         # This assumes that the keys in each iteration won't change!
         for tabular_fd in list(_tabular_fds.values()):
